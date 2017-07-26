@@ -1,0 +1,42 @@
+
+These are my anwers to the test questions, I've left the questions in and indicated my additions with an ANSWER heading.
+
+1) The following two questions do not necessarily have a specific right or wrong answer, thus the how and why are important. What type of class or OOP programming structure would make sense to use in the following scenarios? How and Why?
+
+1a. You are building an open source application framework, to handle sessions you would like to use Memcache by default but allow others to create modules for other session handling services.
+
+ANSWER
+Defining an interface would seem appropriate to enforce that everything is compatible and can be used interchangeably. Or an abstract class that defines the default way of doing things but can be overwritten in some areas by inheriting classes might be a good approach.
+
+1b. You have many classes which need to share some methods, some of these classes already extend another unrelated class, some do not.
+
+ANSWER
+I would think creating a new class with these shared methods that could be imported and instantiated by the other classes when they need them might work. Otherwise some languages have partial inheritance that allows them to combine classes if that's possible. The only other option I can think of is multiple inheritance so they all ultimately derive from the same class that defines the methods.
+
+------------------------------------------------------------------------------------------
+
+2) You have a Mysql table with 500 Million rows. The structure is the following:
+
+CREATE TABLE `buildings` (
+
+ `id` int(11) NOT NULL AUTO_INCREMENT,
+
+ `name` varchar(255) NOT NULL,
+
+ `type` enum('Highrise','Lowrise','Retail','Industrial') NOT NULL,
+
+`city` varchar(100) NOT NULL,
+
+ PRIMARY KEY (`id`)
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
+
+A sample query that would often need to run on the database is “SELECT * FROM posts WHERE type = ? AND city = ? LIMIT 5000”. Would you add an index or indices to this table other than the primary index? What are the pros and cons of doing so?
+
+ANSWER
+I think the building type would be the best candidate for an index. It's not a varchar which is more expensive to do an index on, it gets used a lot so it will save a lot on queries, and there's a limited number of values so it's better than doing a full table scan such as would happen with mostly unique values. Also it is unlikely to change so it won't affect updates to the table negatively. 
+
+Assuming there are no other related tables or different querying scenarios, do you think mysql is an optimal approach here? Why or why not and what might an alternative be?
+
+ANSWER
+A NoSql solution might be preferable since they are not relational databases. This puts much fewer constraints on the design of the database which allows for quicker setup and better performance in some situations. There are drawbacks, it's a fairly new technology so a lot of the tools available for MySql wouldn't be available. And assuming there are other tables that are relational it might be convenient at some point to have it all in one database.
